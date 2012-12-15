@@ -6,7 +6,7 @@ A collection of scripts. Some really useless, others even more.
 Or so it may seem... It might just turn out to work and even be correct!
 
 ##TODO's
-* Write a Shannon-calculator (oh, this one also needs the "big picture" -> total occurences)
+* Write a Shannon-calculator (oh, this one also needs the "big picture" -> total occurrences)
 * Think of what to do with non-existing char combo's
 * Generate some fancy graphs?
 * Think of what size our tuples should be
@@ -31,7 +31,7 @@ Mapper; send N character sets
 		emit( [ buffer[i], buffer[(i+1) % 3], buffer[(i+2) % 3] ], ONE);
 	}
 
-Combiner/Reducer; sum the sets to a [tuple, occurences]
+Combiner/Reducer; sum the sets to a \[tuple, occurences\]
 (single set)
 
 ###Run 2 - calc total
