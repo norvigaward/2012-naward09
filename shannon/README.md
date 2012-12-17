@@ -10,10 +10,13 @@ From there: H = log(T) - LOGSUM/T
 The result is the information expressed in natural units (= 1/ln(2) ~ 1.44 bit)
 
 An example output is;
-	cat outData_calcShan/part-r-00000 
+
+	$cat outData_calcShan/part-r-00000 
 	LOG	   743932.7735045124
 	TOTAL  2.12026857E8
-	
+
+And we can do some calculations with that info;
+
 	Now H = ln(TOTAL) - (1/TOTAL)*LOG
 		  = 8.322882203 Nat
 		  = 12.00738088 bit
