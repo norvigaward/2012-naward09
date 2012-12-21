@@ -34,13 +34,10 @@ public class CharCount extends Configured implements Tool {
 		job.setOutputValueClass(LongWritable.class);
 
 		// ~ Specify input/output
-		// Path inputPath = new Path("/home/participant/data/textData-*");
 		FileInputFormat.setInputPathFilter(job, SimpleInputFilter.class);
 		SimpleInputFilter.setFilter("Data");
 		Path inputPath = new Path("/home/participant/data/multiple/*");
-		// Path inputPath = new Path("/home/participant/data/");
 		Path outputPath = new Path("/tmp/outData_MULTIRUN/");
-		// Path outputPath = new Path("/user/naward09/firstOutput");
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 
