@@ -35,7 +35,7 @@ public class CharMapper extends Mapper<Text, Text, Text, LongWritable> {
 			for (int j = (this.size - 1); j < line.length(); j++) {
 				char currChar = Character.toLowerCase(line.charAt(j));
 				if (isValid(currChar)) {
-					i = i % 3;
+					i = i % size;
 					this.cycle[i] = currChar;
 
 					// Build the output from the cycle
