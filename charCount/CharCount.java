@@ -35,9 +35,9 @@ public class CharCount extends Configured implements Tool {
 
 		// ~ Specify input/output
 		FileInputFormat.setInputPathFilter(job, SimpleInputFilter.class);
-		SimpleInputFilter.setFilter("Data");
-		Path inputPath = new Path("/home/participant/data/multiple/*");
-		Path outputPath = new Path("/tmp/outData_MULTIRUN/");
+		SimpleInputFilter.setFilter("textData");
+		Path inputPath = new Path("/home/participant/data/multiple/*/*");
+		Path outputPath = new Path("/tmp/outData_MULTIRUN_multiFolderLevel/");
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 
