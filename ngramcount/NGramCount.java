@@ -8,6 +8,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
@@ -20,6 +21,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 
+import charCount.ByteMapper;
+import charCount.CharMapper;
 import charCount.SimpleInputFilter;
 
 
@@ -33,7 +36,7 @@ public class NGramCount extends Configured implements Tool {
 
 	static final Logger LOG = Logger.getLogger(NGramCount.class);
 	
-	public static final int N = 4;
+	public static final int N = 8;
 	
 	private static final String ARGNAME_INPATH = "-in";
 	private static final String ARGNAME_OUTPATH = "-out";
@@ -41,8 +44,8 @@ public class NGramCount extends Configured implements Tool {
 	private static final String ARGNAME_OVERWRITE = "-overwrite";
 	private static final String ARGNAME_MAXFILES = "-maxfiles";
 	private static final String ARGNAME_NUMREDUCE = "-numreducers";
-	private static final String FILEFILTER = "textData-";
-	//private static final String FILEFILTER = "sample-";
+	private static final String FILEFILTER = "textData-0000";
+	//private static final String FILEFILTER = "textData-sample3";
 
 	public void usage() {
 		System.out
@@ -139,6 +142,7 @@ public class NGramCount extends Configured implements Tool {
 		LOG.info("setting output path to '" + outputPath + "'");
 		FileOutputFormat.setOutputPath(job, new Path(outputPath));
 		FileOutputFormat.setCompressOutput(job, false);
+		//FileOutputFormat.setOutputCompressorClass(job, GzipCodec.class);
 
 		// Set which InputFormat class to use.
 		job.setInputFormatClass(SequenceFileInputFormat.class);
@@ -148,11 +152,11 @@ public class NGramCount extends Configured implements Tool {
 		job.setOutputFormatClass(TextOutputFormat.class);
 
 		// Set the output data types.
-		job.setOutputKeyClass(NGramWritable.class);
+		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(LongWritable.class);
 
 		// Set which Mapper and Reducer classes to use.
-		job.setMapperClass(NGramCountMapperArray.class);
+		job.setMapperClass(ByteMapper.class);
 		job.setCombinerClass(LongSumReducer.class);
 		job.setReducerClass(LongSumReducer.class);
 
