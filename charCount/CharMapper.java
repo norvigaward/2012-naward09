@@ -4,14 +4,14 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class CharMapper extends Mapper<Text, Text, Text, LongWritable> {
+public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 	private int size = 8;
 	private static final LongWritable ONE = new LongWritable(1L);
 	private StringBuilder builder = new StringBuilder(size);
 	private Text txt = new Text();
 	private char[] cycle = new char[size];
 
-	public void map(Text key, Text val, Context context) {
+	public void map(KEY key, Text val, Context context) {
 		String line = val.toString();
 
 		// ~ Check if this line is worth spending effort on
