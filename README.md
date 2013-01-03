@@ -6,11 +6,9 @@ A collection of scripts. Some really useless, others even more.
 Or so it may seem... It might just turn out to work and even be correct!
 
 ##TODO's
-* Write a Shannon-calculator (oh, this one also needs the "big picture" -> total occurrences)
 * Think of what to do with non-existing char combo's
+* Run on big data set
 * Generate some fancy graphs?
-* Think of what size our tuples should be
-* Improve old code (especially mine ;) )
 
 
 ---
@@ -27,7 +25,7 @@ Mapper; send N character sets
 	while(inputStream.hasNext()) {
 		buffer[i] = inputStream.next();
 		i = (i + 1) % 3;
-		[a, b, c]
+		buffer[i] = inputStream.next();
 		emit( [ buffer[i], buffer[(i+1) % 3], buffer[(i+2) % 3] ], ONE);
 	}
 
@@ -35,8 +33,11 @@ Combiner/Reducer; sum the sets to a \[tuple, occurences\]
 (single set)
 
 ###Run 2 - calc total
-Mapper; 
+Mapper; calculate & emit {LOG; o*log(o)}'s and {TOTAL: o}'s.
+Combiner/Reducer; sum it all...
 
+###Small calculator
+(TOTAL*log(TOTAL) - LOGSUM) / TOTAL
 
 ---
 ## NGramCount
