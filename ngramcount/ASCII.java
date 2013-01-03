@@ -211,63 +211,63 @@ public final class ASCII {
         return isType(ch, ALPHA);
     }
 
-    static boolean isDigit(int ch) {
+    public static boolean isDigit(int ch) {
         return ((ch-'0')|('9'-ch)) >= 0;
     }
 
-    static boolean isAlnum(int ch) {
+    public static boolean isAlnum(int ch) {
         return isType(ch, ALNUM);
     }
 
-    static boolean isGraph(int ch) {
+    public static boolean isGraph(int ch) {
         return isType(ch, GRAPH);
     }
 
-    static boolean isPrint(int ch) {
+    public static boolean isPrint(int ch) {
         return ((ch-0x20)|(0x7E-ch)) >= 0;
     }
 
-    static boolean isPunct(int ch) {
+    public static boolean isPunct(int ch) {
         return isType(ch, PUNCT);
     }
 
-    static boolean isSpace(int ch) {
+    public static boolean isSpace(int ch) {
         return isType(ch, SPACE);
     }
 
-    static boolean isHexDigit(int ch) {
+    public static boolean isHexDigit(int ch) {
         return isType(ch, HEX);
     }
 
-    static boolean isOctDigit(int ch) {
+    public static boolean isOctDigit(int ch) {
         return ((ch-'0')|('7'-ch)) >= 0;
     }
 
-    static boolean isCntrl(int ch) {
+    public static boolean isCntrl(int ch) {
         return isType(ch, CNTRL);
     }
 
-    static boolean isLower(int ch) {
+    public static boolean isLower(int ch) {
         return ((ch-'a')|('z'-ch)) >= 0;
     }
 
-    static boolean isUpper(int ch) {
+    public static boolean isUpper(int ch) {
         return ((ch-'A')|('Z'-ch)) >= 0;
     }
 
-    static boolean isWord(int ch) {
+    public static boolean isWord(int ch) {
         return isType(ch, WORD);
     }
 
-    static int toDigit(int ch) {
+    public static int toDigit(int ch) {
         return (ctype[ch & 0x7F] & 0x3F);
     }
 
-    static int toLower(int ch) {
+    public static int toLower(int ch) {
         return isUpper(ch) ? (ch + 0x20) : ch;
     }
 
-    static int toUpper(int ch) {
+    public static int toUpper(int ch) {
         return isLower(ch) ? (ch - 0x20) : ch;
     }
 
