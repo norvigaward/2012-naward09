@@ -5,7 +5,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 public class CharMapper extends Mapper<Text, Text, Text, LongWritable> {
-	private int size = 4;
+	private int size = 8;
 	private static final LongWritable ONE = new LongWritable(1L);
 	private StringBuilder builder = new StringBuilder(size);
 	private Text txt = new Text();

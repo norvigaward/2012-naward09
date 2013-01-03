@@ -11,6 +11,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.reduce.LongSumReducer;
 import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.io.compress.GzipCodec;
 
 public class CharCount extends Configured implements Tool {
 	@Override
@@ -40,6 +41,10 @@ public class CharCount extends Configured implements Tool {
 		Path outputPath = new Path("/tmp/outData_MULTIRUN_multiFolderLevel/");
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
+		
+		// ~ Compress that output!
+		FileOutputFormat.setCompressOutput(job, true);
+		FileOutputFormat.setOutputCompressorClass(job, GzipCodec.class);
 
 		System.out.println("Output path is " + outputPath.toString());
 
