@@ -1,20 +1,19 @@
 package ngramcount;
 
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 
-public class NGramWritable extends IntWritable {
+public class NGramWritable extends LongWritable {
 
 	public NGramWritable() {
 	}
 
-	public NGramWritable(int value) {
+	public NGramWritable(long value) {
 		super(value);
 	}
 
-	@Override
 	public String toString() {
 		byte[] bytes = new byte[NGramCount.N];
-		int k = get();
+		long k = get();
 		for(int j = NGramCount.N-1; j >= 0; j--) {
 			bytes[j] = (byte) (k & 0x1f);
 			if(bytes[j] > 0) {

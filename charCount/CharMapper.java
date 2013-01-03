@@ -8,6 +8,7 @@ public class CharMapper extends Mapper<Text, Text, Text, LongWritable> {
 	private int size = 4;
 	private static final LongWritable ONE = new LongWritable(1L);
 	private StringBuilder builder = new StringBuilder(size);
+	private Text txt = new Text();
 	private char[] cycle = new char[size];
 
 	public void map(Text key, Text val, Context context) {
@@ -46,7 +47,8 @@ public class CharMapper extends Mapper<Text, Text, Text, LongWritable> {
 					i++;
 
 					try {
-						context.write(new Text(builder.toString()), ONE);
+						txt.set(builder.toString());
+						context.write(txt, ONE);
 					} catch (Exception e) {
 					}
 				}

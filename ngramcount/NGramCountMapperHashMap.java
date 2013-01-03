@@ -22,12 +22,12 @@ public class NGramCountMapperHashMap<KEY> extends Mapper<KEY, Text, NGramWritabl
 	private NGramWritable outKey = new NGramWritable();
 	private LongWritable outVal = new LongWritable(1);
 
-	private static final int BITS_PER_CHAR = 5;
-	private static final int MASK = (1 << (BITS_PER_CHAR)) - 1;
-	private static final int NUM_ENTRIES = (1 << (BITS_PER_CHAR * NGramCount.N));
-	private static final int N_MASK = NUM_ENTRIES - 1;
+	private static final long BITS_PER_CHAR = 5L;
+	private static final long MASK = (1L << (BITS_PER_CHAR)) - 1L;
+	private static final long NUM_ENTRIES = (1L << (BITS_PER_CHAR * NGramCount.N));
+	private static final long N_MASK = NUM_ENTRIES - 1L;
 
-	private Map<Integer, Long> h = new HashMap<Integer, Long>(1 << 20);
+	private Map<Long, Long> h = new HashMap<Long, Long>(10000000);
 
 	// private long[] h;
 
@@ -48,11 +48,11 @@ public class NGramCountMapperHashMap<KEY> extends Mapper<KEY, Text, NGramWritabl
 			if (bytes.length < NGramCount.N) {
 				context.getCounter(MAPPERCOUNTER.EMPTY_PAGE_TEXT).increment(1);
 			} else {
-				int k = 0;
+				long k = 0;
 				int l = 0;
 				for (int i = 0; i < bytes.length - NGramCount.N; i++) {
 					if (ASCII.isAlpha(bytes[i])) {
-						k <<= 5;
+						k <<= 5L;
 						k |= (MASK & bytes[i]);
 						k &= N_MASK;
 						if (++l >= NGramCount.N) {
@@ -90,7 +90,7 @@ public class NGramCountMapperHashMap<KEY> extends Mapper<KEY, Text, NGramWritabl
 	}
 
 	protected void cleanup(Context context) throws IOException, InterruptedException {
-		for (Map.Entry<Integer, Long> entry: h.entrySet()) {
+		for (Map.Entry<Long, Long> entry: h.entrySet()) {
 			if (entry.getValue() > 0) {
 				outKey.set(entry.getKey());
 				outVal.set(entry.getValue());
