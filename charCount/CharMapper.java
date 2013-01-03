@@ -6,6 +6,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 	private static final int SIZE = 8;
+	private static final int MAX_INDEX = SIZE - 1;
 	private static final LongWritable ONE = new LongWritable(1L);
 	private StringBuilder builder = new StringBuilder(SIZE);
 	private Text txt = new Text();
@@ -21,12 +22,12 @@ public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 
 			// ~ Fill the buffer
 			int useless = 0;
-			for (j = 0; (j < SIZE - 1 + useless) && (j < line.length()); j++) {
+			for (j = 0; (j < MAX_INDEX + useless) && (j < line.length()); j++) {
 				char currChar = Character.toLowerCase(line.charAt(j));
 
 				// Only a-z
 				if (isValid(currChar)) {
-					this.cycle[i] = currChar;
+					cycle[i] = currChar;
 					i++;
 				} else {
 					useless++;
@@ -42,8 +43,10 @@ public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 
 					// Build the output from the cycle
 					builder.delete(0, SIZE);
-					builder.append(this.cycle, i, (this.cycle.length - i));
-					builder.append(this.cycle, 0, i);
+					if(i < MAX_INDEX) {
+						builder.append(cycle, i + 1, MAX_INDEX - i);
+					}
+					builder.append(cycle, 0, i + 1);
 
 					i++;
 
