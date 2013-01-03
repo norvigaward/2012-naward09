@@ -17,7 +17,9 @@ public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 
 		// ~ Check if this line is worth spending effort on
 		if (line.length() >= SIZE) {
+			// ~ Current position in cycled char buffer
 			int i = 0;
+			// ~ Current position in input line
 			int j;
 
 			// ~ Fill the buffer
@@ -25,7 +27,7 @@ public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 			for (j = 0; (j < MAX_INDEX + useless) && (j < line.length()); j++) {
 				char currChar = Character.toLowerCase(line.charAt(j));
 
-				// Only a-z
+				// ~ Only a-z are allowed
 				if (isValid(currChar)) {
 					cycle[i] = currChar;
 					i++;
@@ -43,7 +45,7 @@ public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 
 					// Build the output from the cycle
 					builder.delete(0, SIZE);
-					if(i < MAX_INDEX) {
+					if (i < MAX_INDEX) {
 						builder.append(cycle, i + 1, MAX_INDEX - i);
 					}
 					builder.append(cycle, 0, i + 1);
