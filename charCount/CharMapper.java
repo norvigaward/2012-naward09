@@ -17,10 +17,11 @@ public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 		// ~ Check if this line is worth spending effort on
 		if (line.length() >= SIZE) {
 			int i = 0;
+			int j;
 
 			// ~ Fill the buffer
 			int useless = 0;
-			for (int j = 0; (j < SIZE + useless) && (j < line.length()); j++) {
+			for (j = 0; (j < SIZE - 1 + useless) && (j < line.length()); j++) {
 				char currChar = Character.toLowerCase(line.charAt(j));
 
 				// Only a-z
@@ -33,7 +34,7 @@ public class CharMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 			}
 
 			// ~ Start looping through the rest of the string
-			for (int j = (SIZE - 1); j < line.length(); j++) {
+			for (; j < line.length(); j++) {
 				char currChar = Character.toLowerCase(line.charAt(j));
 				if (isValid(currChar)) {
 					i = i % SIZE;
