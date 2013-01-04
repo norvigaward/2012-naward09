@@ -14,7 +14,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.reduce.LongSumReducer;
 import org.apache.hadoop.util.GenericOptionsParser;
@@ -45,7 +44,7 @@ public class NGramCount extends Configured implements Tool {
 	private static final String ARGNAME_OVERWRITE = "-overwrite";
 	private static final String ARGNAME_MAXFILES = "-maxfiles";
 	private static final String ARGNAME_NUMREDUCE = "-numreducers";
-	private static final String FILEFILTER = "textData-0000";
+	private static final String FILEFILTER = "textData-00000";
 	//private static final String FILEFILTER = "textData-sample3";
 
 	public void usage() {
@@ -150,14 +149,14 @@ public class NGramCount extends Configured implements Tool {
 		//job.setInputFormatClass(TextInputFormat.class);
 
 		// Set which OutputFormat class to use.
-		job.setOutputFormatClass(SequenceFileOutputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
 
 		// Set the output data types.
-		job.setOutputKeyClass(NGramWritable.class);
+		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(LongWritable.class);
 
 		// Set which Mapper and Reducer classes to use.
-		job.setMapperClass(NGramCountMapperDirect.class);
+		job.setMapperClass(ByteMapper.class);
 		job.setCombinerClass(LongSumReducer.class);
 		job.setReducerClass(LongSumReducer.class);
 
