@@ -44,7 +44,7 @@ public class NGramCount extends Configured implements Tool {
 	private static final String ARGNAME_OVERWRITE = "-overwrite";
 	private static final String ARGNAME_MAXFILES = "-maxfiles";
 	private static final String ARGNAME_NUMREDUCE = "-numreducers";
-	private static final String FILEFILTER = "textData-0000";
+	private static final String FILEFILTER = "textData-00000";
 	//private static final String FILEFILTER = "textData-sample3";
 
 	public void usage() {
