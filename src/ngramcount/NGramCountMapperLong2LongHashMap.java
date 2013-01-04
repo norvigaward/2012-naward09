@@ -28,7 +28,7 @@ public class NGramCountMapperLong2LongHashMap<KEY> extends Mapper<KEY, Text, NGr
 	private static final long NUM_ENTRIES = (1L << (BITS_PER_CHAR * NGramCount.N));
 	private static final long N_MASK = NUM_ENTRIES - 1;
 
-	private Long2LongOpenHashMap h = new Long2LongOpenHashMap(1 << 20);
+	private Long2LongOpenHashMap h = new Long2LongOpenHashMap(1 << 24);
 
 	// private long[] h;
 
@@ -79,7 +79,7 @@ public class NGramCountMapperLong2LongHashMap<KEY> extends Mapper<KEY, Text, NGr
 						// do nothing
 					}
 				}
-				if(h.size() > (1 << 19)) {
+				if(h.size() > (1 << 23)) {
 					cleanup(context);
 					setup(context);
 				}
@@ -93,14 +93,21 @@ public class NGramCountMapperLong2LongHashMap<KEY> extends Mapper<KEY, Text, NGr
 	protected void cleanup(Context context) throws IOException, InterruptedException {
 		ObjectIterator<Entry> it = h.long2LongEntrySet().fastIterator();
 		Entry e;
+		long x = 0;
+		long y = 0;
 		while(it.hasNext()) {
 			e = it.next();
 			if(e.getLongValue() > 0) {
+				x++;
+				if(e.getLongValue() > 1) {
+					y++;
+				}
 				outKey.set(e.getLongKey());
 				outVal.set(e.getLongValue());
 				context.write(outKey, outVal);					
 			}
 
 		}
+		System.out.println("Aantal keys: " + x + ", aantal groter dan 1: " + y);
 	}
 }

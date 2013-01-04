@@ -14,6 +14,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.reduce.LongSumReducer;
 import org.apache.hadoop.util.GenericOptionsParser;
@@ -149,14 +150,14 @@ public class NGramCount extends Configured implements Tool {
 		//job.setInputFormatClass(TextInputFormat.class);
 
 		// Set which OutputFormat class to use.
-		job.setOutputFormatClass(TextOutputFormat.class);
+		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
 		// Set the output data types.
-		job.setOutputKeyClass(Text.class);
+		job.setOutputKeyClass(NGramWritable.class);
 		job.setOutputValueClass(LongWritable.class);
 
 		// Set which Mapper and Reducer classes to use.
-		job.setMapperClass(ByteMapper.class);
+		job.setMapperClass(NGramCountMapperDirect.class);
 		job.setCombinerClass(LongSumReducer.class);
 		job.setReducerClass(LongSumReducer.class);
 

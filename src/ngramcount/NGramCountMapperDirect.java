@@ -17,85 +17,71 @@ public class NGramCountMapperDirect<KEY> extends
 	protected static enum MAPPERCOUNTER {
 		RECORDS_IN, EMPTY_PAGE_TEXT, EXCEPTIONS
 	}
+	
+	private static final int SIZE = 8;
+	private static final int MAX_INDEX = SIZE - 1;
 
 	private NGramWritable outKey = new NGramWritable();
-	private LongWritable outVal = new LongWritable(1);
 	private static final LongWritable ONE = new LongWritable(1L);
 
-	private static final int BITS_PER_CHAR = 5;
+	private static final long BITS_PER_CHAR = 5L;
 	private static final int MASK = (1 << (BITS_PER_CHAR)) - 1;
-	private static final int NUM_ENTRIES = (1 << (BITS_PER_CHAR*NGramCount.N));
-	private static final int N_MASK = NUM_ENTRIES - 1;
+	private static final long NUM_ENTRIES = (1L << (BITS_PER_CHAR*NGramCount.N));
+	private static final long N_MASK = NUM_ENTRIES - 1;
+	static final long x = NUM_ENTRIES >> SIZE;
 	
-	
-	//private Map<Integer, Long> h;
-	//private long[] h;
-
-	protected void setup(Context context) throws IOException,
-			InterruptedException {
-		//h = new HashMap<Integer, Long>();
-		//h = new long[NUM_ENTRIES];
-	}
-
 	@Override
 	public void map(KEY key, Text value, Context context)
 			throws IOException {
 
 		context.getCounter(MAPPERCOUNTER.RECORDS_IN).increment(1);
 		
-		boolean lastUseless = false;
-		
-		try {
-			byte[] bytes = value.getBytes();
-			if (bytes.length < NGramCount.N) {
-				context.getCounter(MAPPERCOUNTER.EMPTY_PAGE_TEXT).increment(1);
-			} else {
-				int k = 0;
-				int l = 0;
-				for (int i = 0; i < bytes.length - NGramCount.N; i++) {
-					if(ASCII.isAlpha(bytes[i])) {
-						k <<= 5;
-						k |= (MASK & bytes[i]);
-						k &= N_MASK;
-						if(++l >= NGramCount.N) {
-							outKey.set(k);
-							context.write(outKey, ONE);
-							//h[k]++;
-						}
-						lastUseless = false;
-					} else if(!lastUseless && k > 0) {
-						k <<= 5;
-						k &= N_MASK;
-						lastUseless = true;
-						if(++l >= NGramCount.N) {
-							outKey.set(k);
-							context.write(outKey, ONE);
-								//h[k]++;
-						}
-					} else {
-						// do nothing
-					}
-					//if (h.containsKey(k)) {
-					//	h.put(k, h.get(k) + 1);
-					//} else {
-					//	h.put(k, 1L);
-					//}
+		// ~ Check if this line is worth spending effort on
+		if (value.getLength() >= SIZE) {
+			int j;
+			long k = 0;
+
+			// ~ Fill the buffer
+			int useless = 0;
+			for (j = 0; (j < MAX_INDEX + useless) && (j < value.getLength()); j++) {
+				int currChar = convert(value.charAt(j));
+
+				// Only a-z,toLower(A-Z) and ' '
+				if (currChar != -1) {
+					k <<= 5;
+					k |= currChar;
+					k &= N_MASK;					
+				} else {
+					useless++;
 				}
 			}
-		} catch (Exception ex) {
-			NGramCount.LOG.error("Caught Exception", ex);
-			context.getCounter(MAPPERCOUNTER.EXCEPTIONS).increment(1);
+
+			// ~ Start looping through the rest of the string
+			for (; j < value.getLength(); j++) {
+				int currChar = convert(value.charAt(j));
+				
+				if (currChar != -1) {
+					k <<= 5;
+					k |= currChar;
+					k &= N_MASK;					
+
+					try {
+						outKey.set(k);
+						context.write(outKey, ONE);
+					} catch (Exception e) {
+					}
+				}
+			}
+		} else {
+			context.getCounter(MAPPERCOUNTER.EMPTY_PAGE_TEXT).increment(1);
 		}
 	}
 
-	protected void cleanup(Context context) throws IOException,
-			InterruptedException {
-		/*for (int i = 0; i < h.length; i++) {
-			if(h[i]>0) {
-				outKey.set(i);
-				outVal.set(h[i]);
-				context.write(outKey, outVal);					
-			}
-		}*/
+	private static int convert(int c) {
+		if(ASCII.isAlpha(c) || c == ' ') {
+			return MASK & c;
+		} else {
+			return -1; // invalid
+		}
 	}
 }

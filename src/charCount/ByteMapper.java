@@ -62,7 +62,7 @@ public class ByteMapper<KEY> extends Mapper<KEY, Text, Text, LongWritable> {
 		}
 	}
 
-	private int convert(int c) {
+	private static int convert(int c) {
 		if (((c-'a')|('z'-c)) >= 0 || c == ' ') {
 			return c;
 		} else if(((c-'A')|('Z'-c)) >= 0) {
