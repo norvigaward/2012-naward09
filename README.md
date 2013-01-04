@@ -6,7 +6,6 @@ A collection of scripts. Some really useless, others even more.
 Or so it may seem... It might just turn out to work and even be correct!
 
 ##TODO's
-* Think of what to do with non-existing char combo's
 * Run on big data set
 * Generate some fancy graphs?
 
@@ -33,11 +32,18 @@ Combiner/Reducer; sum the sets to a \[tuple, occurences\]
 (single set)
 
 ###Run 2 - calc total
-Mapper; calculate & emit {LOG; o*log(o)}'s and {TOTAL: o}'s.
-Combiner/Reducer; sum it all...
+A second run, over the output of the first run. This transforms a large dictionary into three values, two of which are required to calculate the entropy.
 
-###Small calculator
-(TOTAL*log(TOTAL) - LOGSUM) / TOTAL
+About the output;
+LOG X	The sum of the o*ln(o) where o is the amount of occurrences of a certain combination.
+TOTAL Y	The sum of all the o
+DIFF Z	The amount of combinations (#o)
+
+###Run 3 - calculating the entropy
+Continues where run 2 stopped.
+
+ln(TOTAL) - (LOG/TOTAL)
+LOG and TOTAL being the respective output of shanCalc
 
 ---
 ## NGramCount
