@@ -16,7 +16,7 @@ public class ShanCalc extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 		Job job = new Job();
 
-		job.setJobName("Character list building");
+		job.setJobName("ShanCalc");
 
 		// ~ Now where can we find them classes?
 		job.setJarByClass(ShanMap.class);
@@ -34,9 +34,12 @@ public class ShanCalc extends Configured implements Tool {
 
 		// ~ Specify input/output
 		FileInputFormat.setInputPathFilter(job, SimpleInputFilter.class);
-		SimpleInputFilter.setFilter("N5F5");
-		Path inputPath = new Path("/home/participant/results/*");
-		Path outputPath = new Path("/tmp/outData_calcShan/");
+		SimpleInputFilter.setFilter("part");
+		Path inputPath = new Path("/user/naward09/ngramcount-1segment-output/*");
+		Path outputPath = new Path("/user/naward09/ngramcount-1segment-output_SHANNON/");
+		//Path inputPath = new Path("/tmp/compressedMULTIOUTPUT/*");
+		//Path outputPath = new Path("/tmp/outData_calcShanCOMPRESSEDIN/");
+		
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 

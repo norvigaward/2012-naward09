@@ -9,8 +9,8 @@ public class ShanMap extends Mapper<Text, Text, Text, DoubleWritable> {
 	private static final Text TOTAL = new Text("TOTAL");
 
 	public void map(Text key, Text val, Context context) {
-		int count = Integer.parseInt(val.toString());
-
+		double count = Double.parseDouble(val.toString());
+		
 		double output = (1.0 / count) * Math.log(count);
 
 		try {
