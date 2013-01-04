@@ -43,6 +43,7 @@ DIFF Z	The amount of combinations (#o)
 Continues where run 2 stopped.
 
 ln(TOTAL) - (LOG/TOTAL)
+
 LOG and TOTAL being the respective output of shanCalc
 
 ---
