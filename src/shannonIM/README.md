@@ -3,9 +3,9 @@
 It uses a smarter algorithm to achieve a lower approximation of the Shannon limit, and it does not require multiple runs.
 
 ###The inner workings
-The expected input looks like this
-[seven character string][some 8'th char]	[#occurrences]  enter
-[seven character string][other 8'th char]	[#occurrences]  enter
+The expected input looks like this  return
+[seven character string][some 8'th char]	[#occurrences]  return
+[seven character string][other 8'th char]	[#occurrences]  return
 etc.
 
 This mapper ignores the 8'th character, uses the seven character string as KEY, and the #occurrences as VALUE.  enter
