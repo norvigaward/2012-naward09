@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
@@ -11,20 +12,19 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.reduce.LongSumReducer;
 import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.io.compress.GzipCodec;
 
 public class CharCount extends Configured implements Tool {
 	@Override
 	public int run(String[] args) throws Exception {
 		Job job = new Job();
 
-		job.setJobName("Character list building");
+		job.setJobName("CharList full run");
 
 		// ~ Now where can we find them classes?
-		job.setJarByClass(CharMapper.class);
-
+		job.setJarByClass(ByteMapper.class);
+		
 		// ~ Set map/combine/reduce classes
-		job.setMapperClass(CharMapper.class);
+		job.setMapperClass(ByteMapper.class);
 		job.setCombinerClass(LongSumReducer.class);
 		job.setReducerClass(LongSumReducer.class);
 
@@ -33,12 +33,14 @@ public class CharCount extends Configured implements Tool {
 		job.setOutputFormatClass(TextOutputFormat.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(LongWritable.class);
+		
+		job.setNumReduceTasks(200);
 
 		// ~ Specify input/output
 		FileInputFormat.setInputPathFilter(job, SimpleInputFilter.class);
 		SimpleInputFilter.setFilter("textData");
-		Path inputPath = new Path("/home/participant/data/multiple/*/*");
-		Path outputPath = new Path("/tmp/outData_MULTIRUN_multiFolderLevel/");
+		Path inputPath = new Path("/data/public/common-crawl/parse-output/segment/*/*");
+		Path outputPath = new Path("/user/naward09/FULL_RUN_DO_NOT_REMOVE_ME/");
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 		

@@ -1,8 +1,8 @@
-package shannon;
+package shannonIM;
 
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -23,22 +23,21 @@ public class ShanCalc extends Configured implements Tool {
 
 		// ~ Set map/combine/reduce classes
 		job.setMapperClass(ShanMap.class);
-		job.setCombinerClass(DoubleSumReducer.class);
-		job.setReducerClass(DoubleSumReducer.class);
+		job.setReducerClass(ShanReducer.class);
 
 		// ~ Define input/output types
 		job.setInputFormatClass(KeyValueTextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(DoubleWritable.class);
+		job.setOutputValueClass(LongWritable.class);
 
 		// ~ Specify input/output
 		FileInputFormat.setInputPathFilter(job, SimpleInputFilter.class);
 		SimpleInputFilter.setFilter("part");
-		Path inputPath = new Path("/user/naward09/ngramcount-1segment-output/*");
-		Path outputPath = new Path("/user/naward09/ngramcount-1segment-output_SHANNON_2/");
-		//Path inputPath = new Path("/tmp/compressedMULTIOUTPUT/*");
-		//Path outputPath = new Path("/tmp/outData_calcShanCOMPRESSEDIN/");
+		//Path inputPath = new Path("/user/naward09/ngramcount-1segment-output/*");
+		//Path outputPath = new Path("/user/naward09/ngramcount-1segment-output_SHANNON_2/");
+		Path inputPath = new Path("/home/participant/data/output_final_run/*");
+		Path outputPath = new Path("/tmp/firstOutput/");
 		
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
