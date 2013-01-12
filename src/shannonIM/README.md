@@ -1,6 +1,6 @@
 ##An improved version of shannon
-
-It uses a smarter algorithm to achieve a lower approximation of the Shannon limit, and it does not require multiple runs.
+It uses a smarter algorithm to achieve a better approximation of the Shannon limit, and it does not require multiple runs.
+(compared to the old algorithm)
 
 ###The inner workings
 The expected input looks like this  
@@ -25,22 +25,6 @@ This mapper ignores the 8'th character, uses the seven character string as KEY, 
 
 The reducer calculates the weighted sum of the entropy of chosing the 8'th char, for every [seven character string] weighted by the amount of occurrences of those strings. It also keeps track of the sum of occurrences.
 
-The cleanup() function of the reducer uses the information gathered during the reduce phase to calculate the entropy (and give some other interesting information).
+The cleanup() function of the reducer uses the information gathered during the reduce phase to calculate the entropy and give some other interesting information.
 
 *BEWARE* Only run this on a single Reducer; it has data dependencies... It can use multiple Mappers though.
-=======
-Thus;
-<pre>
-  [seven character string][some 8'th char]  [#occurrences1]
-  [seven character string][some 8'th char]	[#occurrences2]
-  [seven character string][some 8'th char]  [#occurrences3]
-  [other string]          [some 8'th char]  [#occurrences4]
-</pre>
-Is transformed by the Mapper into;
-<pre>
-  [seven character string]                 {#occurrences1, #occurrences2, #occurrences2}
-  [other string]                           {#occurrences4}
-</pre>
-All these entries are then processed by the reduce funtion, and (finally) outputed by the cleanup function in the reducer.
-
-(and then it's all finished)
