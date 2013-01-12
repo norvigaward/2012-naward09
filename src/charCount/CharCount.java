@@ -40,7 +40,7 @@ public class CharCount extends Configured implements Tool {
 		FileInputFormat.setInputPathFilter(job, SimpleInputFilter.class);
 		SimpleInputFilter.setFilter("textData");
 		Path inputPath = new Path("/data/public/common-crawl/parse-output/segment/*/*");
-		Path outputPath = new Path("/user/naward09/FULL_RUN_DO_NOT_REMOVE_ME/");
+		Path outputPath = new Path("/user/naward09/CharCount_output/");
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 		
