@@ -27,5 +27,5 @@ The reducer calculates the weighted sum of the entropy of chosing the 8'th char,
 
 The cleanup() function of the reducer uses the information gathered during the reduce phase to calculate the entropy and give some other interesting information.
 
-*BEWARE* Only run this on a single Reducer; it has data dependencies... It can use multiple Mappers though.
+*BEWARE* Only run this on a single Reducer; it has data dependencies... It can use multiple Mappers though.  
 *BEWARE 2* Outputs entropy in natural units. Divide by ln(2) to transform these to bit.
